@@ -1,0 +1,59 @@
+plugins {
+  id 'com.github.johnrengelman.shadow' version '7.1.2'
+  id 'java'
+}
+
+apply plugin: 'scala'
+apply plugin: 'application'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation group: 'org.scala-lang'         , name: 'scala-library'                 , version: '2.13.10'
+    implementation group: 'org.scala-lang'         , name: 'scala-compiler'                , version: '2.13.10'
+    implementation group: 'org.subethamail'        , name: 'subethasmtp'                   , version: '3.1.7'
+    implementation group: 'io.netty'               , name: 'netty-all'                     , version: '4.1.17.Final'
+    implementation group: 'org.scala-lang.modules' , name: 'scala-parser-combinators_2.13' , version: '2.1.1'
+    implementation group: 'io.dropwizard.metrics'  , name: 'metrics-core'                  , version: '4.0.0'
+
+    implementation group: 'org.slf4j', name: 'slf4j-api', version: '2.0.3'
+    implementation group: 'org.slf4j', name: 'slf4j-simple', version: '2.0.3'
+    implementation group: 'javax.mail', name: 'javax.mail-api', version: '1.6.2'
+}
+
+task repl(type:JavaExec) {
+    mainClass = "scala.tools.nsc.MainGenericRunner"
+    classpath = sourceSets.main.runtimeClasspath
+    standardInput System.in
+    args '-usejavacp'
+}
+
+application {
+    mainClass = 'com.snap.smtp.SnapServer'
+}
+
+processResources {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE // allow duplicates
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src/main/java'
+        }
+        resources {
+            srcDir 'src/main/resources'
+                exclude '**/*.sample'
+        }
+    }
+}
+
+shadowJar {
+    classifier = ''
+}
+
+compileScala { // or: tasks.withType(ScalaCompile)
+    scalaCompileOptions.additionalParameters = ["-feature","-deprecation","-unchecked","-Xlint","-Xfatal-warnings","-Xsource:3"]
+}

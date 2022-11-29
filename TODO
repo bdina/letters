@@ -1,0 +1,10 @@
+smtp server
+ ~* pipeline support~
+ * authentication support
+ * TLS
+ * enhanced response code modeling
+
+smtp client
+ * pipeline
+ * authentication
+ * TLS
