@@ -1,6 +1,6 @@
 plugins {
-  id 'com.github.johnrengelman.shadow' version '8.1.0'
-  id 'com.palantir.git-version' version '0.13.0'
+  id 'com.github.johnrengelman.shadow' version '8.1.1'
+  id 'com.palantir.git-version' version '1.0.0'
 }
 
 apply plugin: 'scala'
@@ -12,7 +12,7 @@ repositories {
 
 ext {
     scala_maj = '2.13'
-    scala_ver = "${scala_maj}.11"
+    scala_ver = "${scala_maj}.12"
 }
 
 dependencies {
@@ -49,6 +49,7 @@ sourceSets {
 }
 
 shadowJar {
+    archiveClassifier = ''
     manifest {
         attributes 'App-Version': gitVersion()
     }
@@ -63,6 +64,6 @@ compileScala { // or: tasks.withType(ScalaCompile)
     , '-Xfatal-warnings'
     , '-Xsource:3'
     , '-release'
-    , '17'
+    , '20'
     ]
 }
